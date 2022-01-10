@@ -38,8 +38,6 @@ class Login extends React.Component {
   }
 
   render() {
-    // const { disabled } = this.state;
-    // console.log(this.props);
     return (
       <div>
         <h1>Login</h1>
