@@ -4,6 +4,7 @@ const INITIAL_STATE_2 = {
   isFetching: false,
   currencies: [],
   expenses: [],
+  valorTotal: 0,
 };
 
 export default function secondReducer(state = INITIAL_STATE_2, action) {
@@ -18,8 +19,13 @@ export default function secondReducer(state = INITIAL_STATE_2, action) {
   case 'WALLET_ACTION':
     return {
       ...state,
+      valorTotal: Number(state.valorTotal) + (Number(action.expenses.value)
+        * Number(action.exchangeRates[action.expenses.currency].ask)),
       expenses: [...state.expenses,
-        { ...action.expenses, exchangeRates: action.exchangeRates }],
+        { ...action.expenses,
+          value: action.expenses.value,
+          // teste: action.exchangeRates[action.expenses.currency].ask,
+          exchangeRates: action.exchangeRates }],
       isFetching: false,
     };
   default:

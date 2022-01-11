@@ -51,8 +51,10 @@ class Wallet extends React.Component {
   }
 
   reduceMassa() {
-    const { walletState: { expenses } } = this.props;
-    return expenses.reduce((acc, curr) => Number(acc) + Number(curr.value), 0).toFixed(2);
+    // const { walletState: { expenses } } = this.props;
+    // return expenses.reduce((acc, curr) => Number(acc) + Number(curr.value), 0).toFixed(2);
+    const { walletState } = this.props;
+    return walletState.valorTotal.toFixed(2);
   }
 
   render() {
