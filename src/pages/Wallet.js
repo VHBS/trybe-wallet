@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchCurrency, walletAction, fetchCurrencyDidMount } from '../actions/index';
+import ExpensesTable from '../components/ExpensesTable';
 
 const alimentacao = 'Alimentação';
 
@@ -51,15 +52,19 @@ class Wallet extends React.Component {
   }
 
   reduceMassa() {
-    const { walletState } = this.props;
-    return Number(walletState.valorTotal).toFixed(2);
+    const { walletState: { expenses } } = this.props;
+    if (expenses.length > 0) {
+      return expenses.reduce((acc, curr) => Number(acc)
+      + (Number(curr.value)
+      * Number(curr.exchangeRates[curr.currency].ask)), 0).toFixed(2);
+    }
+    return 0;
   }
 
   render() {
     const categoryTag = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
-    const { userState, walletState: { expenses, currencies } } = this.props;
+    const { userState, walletState: { currencies } } = this.props;
     const { value, description, currency, method, tag } = this.state;
-    // console.log(expenses);
     return (
       <div>
         <header>
@@ -68,15 +73,9 @@ class Wallet extends React.Component {
               userState.email
             }
           </span>
-
-          { expenses.length > 0 ? (
-            <span data-testid="total-field">
-              { this.reduceMassa() }
-            </span>)
-            : (
-              <span data-testid="total-field">
-                0
-              </span>)}
+          <span data-testid="total-field">
+            { this.reduceMassa() }
+          </span>
           <span data-testid="header-currency-field">
             BRL
           </span>
@@ -92,7 +91,6 @@ class Wallet extends React.Component {
               value={ value }
             />
           </label>
-
           <label htmlFor="description">
             Descrição
             <input
@@ -103,7 +101,6 @@ class Wallet extends React.Component {
               value={ description }
             />
           </label>
-
           <label htmlFor="currency">
             Moeda referente a despesa
             <select
@@ -123,7 +120,6 @@ class Wallet extends React.Component {
               ))}
             </select>
           </label>
-
           <label htmlFor="method">
             Forma de pagamento
             <select
@@ -137,7 +133,6 @@ class Wallet extends React.Component {
               <option value="Cartão de débito">Cartão de débito</option>
             </select>
           </label>
-
           <label htmlFor="tag">
             Tipo de despesa
             <select
@@ -151,7 +146,6 @@ class Wallet extends React.Component {
               ))}
             </select>
           </label>
-
           <button
             type="button"
             onClick={ this.handleClick }
@@ -159,41 +153,7 @@ class Wallet extends React.Component {
             Adicionar despesa
           </button>
         </form>
-        <table>
-          <thead>
-            <tr>
-              <th>Descrição</th>
-              <th>Tag</th>
-              <th>Método de pagamento</th>
-              <th>Valor</th>
-              <th>Moeda</th>
-              <th>Câmbio utilizado</th>
-              <th>Valor convertido</th>
-              <th>Moeda de conversão</th>
-              <th>Editar/Excluir</th>
-            </tr>
-          </thead>
-          <tbody>
-            {expenses.map((item) => (
-              <tr key={ item.id }>
-                <td>{item.description}</td>
-                <td>{item.tag}</td>
-                <td>{item.method}</td>
-                <td>{Number(item.value)}</td>
-                <td>{item.exchangeRates[item.currency].name}</td>
-                <td>{Number(item.exchangeRates[item.currency].ask).toFixed(2)}</td>
-                <td>
-                  {(Number(item.value)
-                  * Number(item.exchangeRates[item.currency].ask)).toFixed(2)}
-
-                </td>
-                <td>{item.exchangeRates[item.currency].name}</td>
-                <td>Real</td>
-                {/* <td><button type="button">Editar/Excluir</button></td> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ExpensesTable />
       </div>
     );
   }

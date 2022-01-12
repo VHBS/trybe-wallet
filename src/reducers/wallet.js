@@ -24,9 +24,15 @@ export default function secondReducer(state = INITIAL_STATE_2, action) {
       expenses: [...state.expenses,
         { ...action.expenses,
           value: action.expenses.value,
-          // teste: action.exchangeRates[action.expenses.currency].ask,
           exchangeRates: action.exchangeRates }],
       isFetching: false,
+    };
+  case 'DELETE_ACTION':
+    return {
+      ...state,
+      expenses: action.deletedItem,
+      valorTotal: Number(state.valorTotal) - Number(action.valueDeletedItem),
+      testando: action.valueDeletedItem,
     };
   default:
     return state;

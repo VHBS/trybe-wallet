@@ -25,6 +25,13 @@ export function currencyAction({ currencies }) {
   };
 }
 
+export function deleteAction({ deletedItem, valueDeletedItem }) {
+  return { type: 'DELETE_ACTION',
+    deletedItem,
+    valueDeletedItem,
+  };
+}
+
 export function fetchCurrency(expenses) {
   return async (dispatch) => {
     dispatch(requestCurrency());
