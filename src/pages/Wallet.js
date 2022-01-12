@@ -3,20 +3,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchCurrency, walletAction, fetchCurrencyDidMount } from '../actions/index';
 import ExpensesTable from '../components/ExpensesTable';
+import InputForm from '../components/InputForm';
+import InputFormEditing from '../components/InputFormEditing';
 
 const alimentacao = 'Alimentação';
 
 class Wallet extends React.Component {
   constructor() {
     super();
-    this.state = {
-      id: 0,
-      value: 0,
-      description: '',
-      currency: 'USD',
-      method: 'Dinheiro',
-      tag: alimentacao,
-    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -62,9 +56,8 @@ class Wallet extends React.Component {
   }
 
   render() {
-    const categoryTag = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
-    const { userState, walletState: { currencies } } = this.props;
-    const { value, description, currency, method, tag } = this.state;
+    const { userState, walletState: { isEditing } } = this.props;
+    // console.log(this.props);
     return (
       <div>
         <header>
@@ -80,7 +73,8 @@ class Wallet extends React.Component {
             BRL
           </span>
         </header>
-        <form>
+        {isEditing ? (<InputFormEditing />) : <InputForm />}
+        {/* <form>
           <label htmlFor="value">
             Valor da despesa
             <input
@@ -152,7 +146,7 @@ class Wallet extends React.Component {
           >
             Adicionar despesa
           </button>
-        </form>
+        </form> */}
         <ExpensesTable />
       </div>
     );

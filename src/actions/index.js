@@ -32,6 +32,19 @@ export function deleteAction({ deletedItem, valueDeletedItem }) {
   };
 }
 
+export function editAction({ itemEditing, indiceItem }) {
+  return { type: 'EDITING_ACTION',
+    itemEditing,
+    indiceItem,
+  };
+}
+
+export function editDoneAction({ itemEditado }) {
+  return { type: 'EDIT_DONE_ACTION',
+    itemEditado,
+  };
+}
+
 export function fetchCurrency(expenses) {
   return async (dispatch) => {
     dispatch(requestCurrency());

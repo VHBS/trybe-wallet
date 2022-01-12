@@ -5,6 +5,8 @@ const INITIAL_STATE_2 = {
   currencies: [],
   expenses: [],
   valorTotal: 0,
+  isEditing: false,
+  itemEditing: {},
 };
 
 export default function secondReducer(state = INITIAL_STATE_2, action) {
@@ -34,6 +36,27 @@ export default function secondReducer(state = INITIAL_STATE_2, action) {
       valorTotal: Number(state.valorTotal) - Number(action.valueDeletedItem),
       testando: action.valueDeletedItem,
     };
+  case 'EDITING_ACTION':
+    return {
+      ...state,
+      isEditing: true,
+      itemEditing: { objeto: action.itemEditing,
+        indice: action.indiceItem,
+      },
+    };
+  case 'EDIT_DONE_ACTION':
+  {
+    const newExpenses = state.expenses.map((expense) => {
+      if (expense.id === action.itemEditado.id) {
+        return action.itemEditado;
+      }
+      return expense;
+    });
+    return {
+      ...state,
+      isEditing: false,
+      expenses: newExpenses,
+    }; }
   default:
     return state;
   }
