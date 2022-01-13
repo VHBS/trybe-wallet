@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { fetchCurrency, walletAction, fetchCurrencyDidMount } from '../actions/index';
 import ExpensesTable from '../components/ExpensesTable';
 import InputForm from '../components/InputForm';
-import InputFormEditing from '../components/InputFormEditing';
 
 const alimentacao = 'Alimentação';
 
@@ -56,8 +55,7 @@ class Wallet extends React.Component {
   }
 
   render() {
-    const { userState, walletState: { isEditing } } = this.props;
-    // console.log(this.props);
+    const { userState } = this.props;
     return (
       <div>
         <header>
@@ -73,80 +71,7 @@ class Wallet extends React.Component {
             BRL
           </span>
         </header>
-        {isEditing ? (<InputFormEditing />) : <InputForm />}
-        {/* <form>
-          <label htmlFor="value">
-            Valor da despesa
-            <input
-              type="number"
-              onChange={ this.handleChange }
-              id="value"
-              data-testid="value-input"
-              value={ value }
-            />
-          </label>
-          <label htmlFor="description">
-            Descrição
-            <input
-              type="text"
-              onChange={ this.handleChange }
-              id="description"
-              data-testid="description-input"
-              value={ description }
-            />
-          </label>
-          <label htmlFor="currency">
-            Moeda referente a despesa
-            <select
-              id="currency"
-              onChange={ this.handleChange }
-              data-testid="currency-input"
-              value={ currency }
-            >
-              {currencies.map((moeda, indice) => (
-                <option
-                  key={ moeda + indice }
-                  value={ moeda }
-                  data-testid={ moeda }
-                >
-                  {moeda}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label htmlFor="method">
-            Forma de pagamento
-            <select
-              id="method"
-              data-testid="method-input"
-              onChange={ this.handleChange }
-              value={ method }
-            >
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Cartão de crédito">Cartão de crédito</option>
-              <option value="Cartão de débito">Cartão de débito</option>
-            </select>
-          </label>
-          <label htmlFor="tag">
-            Tipo de despesa
-            <select
-              id="tag"
-              data-testid="tag-input"
-              onChange={ this.handleChange }
-              value={ tag }
-            >
-              {categoryTag.map((item) => (
-                <option key={ item } value={ item }>{item}</option>
-              ))}
-            </select>
-          </label>
-          <button
-            type="button"
-            onClick={ this.handleClick }
-          >
-            Adicionar despesa
-          </button>
-        </form> */}
+        <InputForm />
         <ExpensesTable />
       </div>
     );

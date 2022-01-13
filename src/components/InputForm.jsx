@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchCurrency, walletAction, fetchCurrencyDidMount } from '../actions/index';
+import { fetchCurrency, walletAction,
+  fetchCurrencyDidMount, editDoneAction } from '../actions/index';
 
 const alimentacao = 'Alimentação';
 
@@ -19,6 +20,44 @@ class InputForm extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleClickEdited = this.handleClickEdited.bind(this);
+    this.checkEditing = this.checkEditing.bind(this);
+    this.checkNotEditing = this.checkNotEditing.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { walletState: { isEditing } } = this.props;
+    if (isEditing !== prevProps.walletState.isEditing
+      && isEditing === true) {
+      this.checkEditing();
+    } else if (isEditing !== prevProps.walletState.isEditing
+      && isEditing === false) {
+      this.checkNotEditing();
+    }
+  }
+
+  checkEditing() {
+    const { walletState: { itemEditing: { objeto } } } = this.props;
+    this.setState({
+      id: objeto.id,
+      value: objeto.value,
+      description: objeto.description,
+      currency: objeto.currency,
+      method: objeto.method,
+      tag: objeto.tag,
+      exchangeRates: objeto.exchangeRates,
+    });
+  }
+
+  checkNotEditing() {
+    this.setState({
+      id: 0,
+      value: 0,
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: alimentacao,
+    });
   }
 
   handleChange({ target: { id, value } }) {
@@ -44,9 +83,17 @@ class InputForm extends Component {
     }
   }
 
+  handleClickEdited() {
+    const { editDoneDispatch } = this.props;
+    const { id, value, description, currency, method, tag, exchangeRates } = this.state;
+    const itemEditado = {
+      id, value, description, currency, method, tag, exchangeRates };
+    editDoneDispatch({ itemEditado });
+  }
+
   render() {
     const categoryTag = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
-    const { walletState: { currencies } } = this.props;
+    const { walletState: { currencies, isEditing } } = this.props;
     const { value, description, currency, method, tag } = this.state;
     return (
       <form>
@@ -115,12 +162,20 @@ class InputForm extends Component {
             ))}
           </select>
         </label>
-        <button
-          type="button"
-          onClick={ this.handleClick }
-        >
-          Adicionar despesa
-        </button>
+        {isEditing ? (
+          <button
+            type="button"
+            onClick={ this.handleClickEdited }
+          >
+            Editar despesa
+          </button>)
+          : (
+            <button
+              type="button"
+              onClick={ this.handleClick }
+            >
+              Adicionar despesa
+            </button>)}
       </form>
     );
   }
@@ -138,6 +193,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchCurrencyMount: () => dispatch(fetchCurrencyDidMount()),
   fatchDispatch: (state) => dispatch(fetchCurrency(state)),
   walletDispatch: (state) => dispatch(walletAction(state)),
+  editDoneDispatch: (state) => dispatch(editDoneAction(state)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(InputForm);
