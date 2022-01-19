@@ -21,13 +21,12 @@ export default function secondReducer(state = INITIAL_STATE_2, action) {
   case 'WALLET_ACTION':
     return {
       ...state,
-      valorTotal: Number(state.valorTotal) + (Number(action.expenses.value)
-        * Number(action.exchangeRates[action.expenses.currency].ask)),
       expenses: [...state.expenses,
         { ...action.expenses,
           value: action.expenses.value,
           exchangeRates: action.exchangeRates }],
       isFetching: false,
+      lastId: action.expenses.id,
     };
   case 'DELETE_ACTION':
     return {
@@ -40,9 +39,7 @@ export default function secondReducer(state = INITIAL_STATE_2, action) {
     return {
       ...state,
       isEditing: true,
-      itemEditing: { objeto: action.itemEditing,
-        indice: action.indiceItem,
-      },
+      itemEditing: { objeto: action.itemEditing, indice: action.indiceItem },
     };
   case 'EDIT_DONE_ACTION':
   {
@@ -52,11 +49,7 @@ export default function secondReducer(state = INITIAL_STATE_2, action) {
       }
       return expense;
     });
-    return {
-      ...state,
-      isEditing: false,
-      expenses: newExpenses,
-    }; }
+    return { ...state, isEditing: false, expenses: newExpenses }; }
   default:
     return state;
   }

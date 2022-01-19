@@ -50,8 +50,9 @@ class InputForm extends Component {
   }
 
   checkNotEditing() {
+    const { walletState: { lastId } } = this.props;
     this.setState({
-      id: 0,
+      id: lastId + 1,
       value: 0,
       description: '',
       currency: 'USD',
